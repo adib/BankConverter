@@ -53,7 +53,7 @@ writeTable <- function(resultTable,outputFileName) {
     formatNumber <- function(nv) {
         sub("NA","",format(nv,trim=TRUE))   
     }
-    formattedTable <- arrange(resultTable,desc(Transaction.date)) %>% 
+    formattedTable <- arrange(resultTable,Transaction.date) %>% 
         mutate(
             Transaction.date = formatDate(Transaction.date),
             Value.date = formatDate(Value.date),
