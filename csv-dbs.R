@@ -17,8 +17,6 @@ suppressPackageStartupMessages(library(lubridate))
 # The date format to export.
 dateFormat <- "%Y-%m-%d"
 
-inputFileName <- "~/Downloads/DBS Account Dump Jan-Feb 2015.csv"
-
 readTable <- function(inputFileName) {
     inputTable <- read.csv(inputFileName,header=FALSE,skip=19)
     names(inputTable) <- c("Transaction.date","Reference","Withdrawals","Deposits","Description.1","Description.2","Description.3","Empty")
