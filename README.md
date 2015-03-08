@@ -24,6 +24,7 @@ You will need to have [R](http://cran.r-project.org) version 3.1.2 (or newer) in
 
  - `dplyr`
  - `lubridate`
+
 Please consult R's documentation how to install these.
 
 ## Installation
