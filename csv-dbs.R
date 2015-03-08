@@ -12,7 +12,6 @@
 # Therefore we skip the first 19 lines of the file and then add in our own headers.
 #
 suppressPackageStartupMessages(library(dplyr))
-suppressPackageStartupMessages(library(data.table))
 suppressPackageStartupMessages(library(lubridate))
 
 # The date format to export.
