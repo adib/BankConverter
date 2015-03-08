@@ -14,29 +14,53 @@
 library(dplyr)
 library(lubridate)
 
+# Define a few configurable parameters
+dateFormat <- "%Y-%m-%d"
+
 # Load data
-inputFileName <- "~/Downloads/TransactionHistory_20150307080629.csv"
+i <- "~/Downloads/TransactionHistory_20150307080629.csv"
 
-# The first five rows are header information, we skip it
-inputTable <- read.csv(inputFileName,skip=5)
-inputTable$row.number = 1:nrow(inputTable)
+#
+# Reads the input file and outputs a cleaned data frame
+readTable <- function(inputFileName) {
+    # The first five rows are header information, we skip it
+    inputTable <- read.csv(inputFileName,skip=5)
+    inputTable$row.number = 1:nrow(inputTable)
+    
+    mainRecords <- filter(inputTable,Transaction.date != "") %>% 
+        rename (
+            Withdrawals = Withdrawals..SGD.,
+            Deposits = Deposits..SGD.
+        ) %>% 
+        mutate(
+            Transaction.date = dmy(Transaction.date),
+            Value.date = dmy(Value.date),
+            Withdrawals = as.numeric(gsub(",","", Withdrawals)),
+            Deposits = as.numeric(gsub(",","", Deposits))        
+        )
+    suppRecords <- filter(inputTable,Transaction.date == "")
+    resultTable <- left_join(mainRecords,
+                                mutate(suppRecords,mainRow=row.number-1) %>% 
+                                rename(Description.Extended=Description) %>% 
+                                select(mainRow,Description.Extended),
+                             by=c("row.number" = "mainRow")
+                             )
+    resultTable
+}
 
-mainRecords <- filter(inputTable,Transaction.date != "")
-mainRecords <- filter(inputTable,Transaction.date != "") %>% 
-    rename (
-        Withdrawals = Withdrawals..SGD.,
-        Deposits = Deposits..SGD.
-    ) %>% 
-    mutate(
-        Transaction.date = dmy(Transaction.date),
-        Value.date = dmy(Value.date),
-        Withdrawals = as.numeric(gsub(",","", Withdrawals)),
-        Deposits = as.numeric(gsub(",","", Deposits))        
-)
-suppRecords <- filter(inputTable,Transaction.date == "")
-resultTable <- left_join(mainRecords,
-                           mutate(suppRecords,mainRow=row.number-1) %>% 
-                           rename(Description.Extended=Description) %>% select(mainRow,Description.Extended),
-                         by=c("row.number" = "mainRow")
-                )
+writeTable <- function(resultTable,outputFileName) {
+    formatDate <- function(dv) {
+        format(dv,fmt=dateFormat)
+    }
+    formatNumber <- function(nv) {
+        sub("NA","",format(nv,trim=TRUE))   
+    }
+    formattedTable <- mutate(resultTable,
+        Transaction.date = formatDate(Transaction.date),
+        Value.date = formatDate(Value.date),
+        Withdrawals = formatNumber(Withdrawals),
+        Deposits = formatNumber(Deposits)
+        ) %>% select(Transaction.date,Value.date,Description,Description.Extended,Withdrawals,Deposits)
+    write.csv(formattedTable,outputFileName,row.names=FALSE)
+}
 
