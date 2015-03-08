@@ -1,4 +1,4 @@
-#!/usr/bin/env Rscript
+#!/usr/bin/env Rscript --vanilla 
 # 
 # Reformat OCBC 360 Saving Account pseudo-CSV export into a proper CSV file that is ready for import into a personal finance software.
 #
@@ -11,14 +11,12 @@
 # `Description` column is the transaction type whereas the second row contains free-text comments about the transaction.
 # However not all records are expressed in two lines; those without a free-text field has only one line in the CSV dump.
 #
-library(dplyr)
-library(lubridate)
 
-# Define a few configurable parameters
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(lubridate))
+
+# The date format to export.
 dateFormat <- "%Y-%m-%d"
-
-# Load data
-i <- "~/Downloads/TransactionHistory_20150307080629.csv"
 
 #
 # Reads the input file and outputs a cleaned data frame
@@ -63,4 +61,36 @@ writeTable <- function(resultTable,outputFileName) {
         ) %>% select(Transaction.date,Value.date,Description,Description.Extended,Withdrawals,Deposits)
     write.csv(formattedTable,outputFileName,row.names=FALSE)
 }
+
+#
+# Main
+#
+args <- commandArgs(trailingOnly = TRUE)
+if(length(args) != 2) {
+    initial.options <- commandArgs(trailingOnly = FALSE)
+    file.arg.name <- "--file="
+    script.name <- sub(file.arg.name, "", initial.options[grep(file.arg.name, initial.options)])
+    cat("Reformat OCBC 360 Saving Account pseudo-CSV export into a proper CSV file.\nUsage:\n")
+    cat(paste("  ",script.name,"{input-file} {output-file}\nWhere:\n",
+              "{input-file}\tThe file obtained from OCBC 360's `Export to CSV` function.\n",
+              "{output-file}\tWhere to write the properly-formatted CSV output file.\n"),sep="")
+    quit(save="no",status=3)
+}
+inputFileName <- args[1]
+outputFileName <- args[2]
+if(!file.exists(inputFileName)) {
+    cat(paste("Input file '",inputFileName,"' not found.\n",sep=""))
+    quit(save="no",status=3)    
+}
+if(file.exists(outputFileName)) {
+    cat(paste("Input file '",outputFileName,"' already exists.\n",sep=""))
+    quit(save="no",status=3)    
+}
+
+# Process
+
+writeTable(readTable(inputFileName),outputFileName)
+
+quit(save="no",status=0)
+
 
