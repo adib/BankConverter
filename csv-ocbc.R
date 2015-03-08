@@ -42,7 +42,7 @@ readTable <- function(inputFileName) {
                                 rename(Description.Extended=Description) %>% 
                                 select(mainRow,Description.Extended),
                              by=c("row.number" = "mainRow")
-                             )
+                             ) 
     resultTable
 }
 
@@ -53,12 +53,14 @@ writeTable <- function(resultTable,outputFileName) {
     formatNumber <- function(nv) {
         sub("NA","",format(nv,trim=TRUE))   
     }
-    formattedTable <- mutate(resultTable,
-        Transaction.date = formatDate(Transaction.date),
-        Value.date = formatDate(Value.date),
-        Withdrawals = formatNumber(Withdrawals),
-        Deposits = formatNumber(Deposits)
-        ) %>% select(Transaction.date,Value.date,Description,Description.Extended,Withdrawals,Deposits)
+    formattedTable <- arrange(resultTable,desc(Transaction.date)) %>% 
+        mutate(
+            Transaction.date = formatDate(Transaction.date),
+            Value.date = formatDate(Value.date),
+            Withdrawals = formatNumber(Withdrawals),
+            Deposits = formatNumber(Deposits),
+            Memo = paste(Description,Description.Extended,sep="\t")
+        ) %>% select(Transaction.date,Value.date,Memo,Withdrawals,Deposits)
     write.csv(formattedTable,outputFileName,row.names=FALSE)
 }
 
@@ -88,9 +90,5 @@ if(file.exists(outputFileName)) {
 }
 
 # Process
-
 writeTable(readTable(inputFileName),outputFileName)
-
 quit(save="no",status=0)
-
-
