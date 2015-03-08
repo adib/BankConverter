@@ -9,7 +9,7 @@ In consequence you will need to convert your bank's dump into the file format ex
 Currently these banks and account types are supported:
 
  - [DBS](http://en.wikipedia.org/wiki/DBS_Bank) Savings.
- - [OCBC](http://en.wikipedia.org/wiki/Oversea-Chinese_Banking_Corporation) 360.
+ - [OCBC](http://en.wikipedia.org/wiki/Oversea-Chinese_Banking_Corporation) 360 (savings account) and Frank (credit card account).
 
 ### DBS Savings
 
@@ -17,7 +17,11 @@ DBS' CSV export file has a header with plenty of blank lines, not sure how they 
 
 ### OCBC 360
 
-OCBC's export file also contains non-columnar header lines but without much superfluous blank lines. However in a transaction _may_ consists of two lines – depending whether it contains an extra free-form text. However not all transactions comes in two lines, hence we can't assume in that every even line contains the free-form text.
+OCBC 360's export file also contains non-columnar header lines but without much superfluous blank lines. However in a transaction _may_ consists of two lines – depending whether it contains an extra free-form text. However not all transactions comes in two lines, hence we can't assume in that every even line contains the free-form text.
+
+### OCBC Frank
+
+The credit card account of OCBC contains yet another slightly different format.  The first column _may_ denote a foreign currency transaction and if this is the case, the amount column moves to that row and shifted one column to the left.
 
 ## Prerequisites
 You will need to have [R](http://cran.r-project.org) version 3.1.2 (or newer) installed in your system as well as these R packages:
@@ -32,17 +36,18 @@ These installation steps should work on Unix or Unix-like systems (e.g. Mac OS X
 
  1. Download the repository
  2. Mark the scripts as executable:   
-	$ chmod a+x csv-dbs.R csv-ocbc.R
+	$ chmod a+x csv-dbs.R csv-ocbc.R csv-ocbc-frank.R
  3. Create a symbolic link from `/usr/local/bin` to the script's installation directory:  
 	$ cd /usr/local/bin  
 	$ ln -s {path-to-download}/csv-dbs.R csv-dbs  
 	$ ln -s {path-to-download}/csv-ocbc.R csv-ocbc
+	$ ln -s {path-to-download}/csv-ocbc-frank.R csv-ocbc-frank
 
 If you are a Windows user, please adapt those steps to your system as necessary.
 
 ## Usage
   1. Open your bank's Internet Banking website and download your transaction history into a CSV file.
-  2. Run the conversion script against it, either `csv-dbs` or `csv-ocbc`
+  2. Run the conversion script against it, either `csv-dbs`, `csv-ocbc`, or `csv-ocbc-frank`
       - The first argument is your bank's CSV file as input.
       - The second argument is where to write the processed CSV output.
   3. Import the resulting CSV output into your favorite personal finance software.
