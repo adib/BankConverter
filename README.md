@@ -35,15 +35,18 @@ Please consult R's documentation how to install these.
 ## Installation
 These installation steps should work on Unix or Unix-like systems (e.g. Mac OS X, Linux, or BSD).
 
- 1. Download the repository
- 2. Mark the scripts as executable:   
-	$ chmod a+x csv-dbs.R csv-ocbc.R csv-ocbc-frank.R
- 3. Create a symbolic link from `/usr/local/bin` to the script's installation directory:  
-	$ cd /usr/local/bin  
-	$ ln -s {path-to-download}/csv-dbs.R csv-dbs  
-	$ ln -s {path-to-download}/csv-ocbc.R csv-ocbc
-	$ ln -s {path-to-download}/csv-ocbc-frank.R csv-ocbc-frank
-	$ ln -s {path-to-download}/csv-bca.R csv-bcs
+1. Download the repository
+2. Mark the scripts as executable:
+
+        $ chmod a+x csv-dbs.R csv-ocbc.R csv-ocbc-frank.R
+
+3. Create a symbolic link from `/usr/local/bin` to the script's installation directory:
+
+        $ cd /usr/local/bin  
+        $ ln -s {path-to-download}/csv-dbs.R csv-dbs  
+        $ ln -s {path-to-download}/csv-ocbc.R csv-ocbc
+        $ ln -s {path-to-download}/csv-ocbc-frank.R csv-ocbc-frank
+        $ ln -s {path-to-download}/csv-bca.R csv-bcs
 
 If you are a Windows user, please adapt those steps to your system as necessary.
 
