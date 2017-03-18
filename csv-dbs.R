@@ -19,7 +19,7 @@ dateFormat <- "%Y-%m-%d"
 
 readTable <- function(inputFileName) {
     inputTable <- read.csv(inputFileName,header=FALSE,skip=19)
-    names(inputTable) <- c("Transaction.date","Reference","Withdrawals","Deposits","Description.1","Description.2","Description.3","Empty1","Empty2")
+    names(inputTable) <- c("Transaction.date","Reference","Withdrawals","Deposits","Description.1","Description.2","Description.3","Empty1")
     mutate(inputTable,Transaction.date=dmy(Transaction.date))
 }
 
