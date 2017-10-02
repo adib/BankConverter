@@ -13,6 +13,7 @@
 #
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(lubridate))
+Sys.setenv(TZ='Asia/Singapore')
 
 # The date format to export.
 dateFormat <- "%Y-%m-%d"
