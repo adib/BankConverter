@@ -8,7 +8,7 @@ In consequence you will need to convert your bank's dump into the file format ex
 
 I am **no longer maintaining these scripts**. These kept breaking with new releases of `R`, `lubridate`, or and various other dependencies to the point that I've moved away from `R` for my monthly financial reconciliation workflow.
 
-I've re-written most of these scripts to Python and made it available as [BankConverter2](https://github.com/adib/BankConverter2). These scripts has been stable thus far.
+I've re-written most of these scripts to Python and made it available as [BankConverter2](https://github.com/adib/BankConverter2). Those scripts has been stable thus far.
 
 ## Supported Formats
 
